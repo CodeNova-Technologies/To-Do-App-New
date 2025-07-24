@@ -3,6 +3,7 @@
 // import viteLogo from '/vite.svg'
 
 import Profile from '../pages/Profile/Profile'
+import CompletedTasksPage from '../pages/completedtasks/CompletedTasksPage'
 import './App.css'
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
   return (
     <>
       <Profile />
+     <CompletedTasksPage />
     </>
   )
 }
