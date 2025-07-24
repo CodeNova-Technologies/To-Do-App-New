@@ -30,6 +30,11 @@ const dummyCompletedTasks = [
     text: "Clean room & organize desk",
     completedAt: new Date("2025-07-19T09:16:00"),
   },
+  {
+    id: 5,
+    text: "Create a new playlist in spotify",
+    completedAt: new Date("2025-07-19T09:20:00"),
+  },
 ];
 
 const CompletedTasksPage = () => {
