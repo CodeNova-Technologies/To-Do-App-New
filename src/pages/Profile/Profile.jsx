@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles';
 import { Box, Button, TextField, Typography, Avatar, Paper } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import image from '../../assets/motivation.png';
+import { useState } from 'react';
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -17,6 +18,20 @@ const VisuallyHiddenInput = styled('input')({
 });
 
 export default function Profile() {
+
+    const [profileImage, setProfileImage] = useState(image);
+
+    const handleFileChange = (e) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setProfileImage(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     return (
         <Box
             sx={{
@@ -51,7 +66,7 @@ export default function Profile() {
 
                 <Box sx={{ position: 'relative', width: 100, height: 90, mb: 2 }}>
                     <Avatar
-                        src={image}
+                        src={profileImage}
                         sx={{
                             width: 100,
                             height: 100,
@@ -76,7 +91,7 @@ export default function Profile() {
                         }}
                     >
                         <CloudUploadIcon fontSize="small" sx={{ fontSize: '18px' }} />
-                        <VisuallyHiddenInput type="file" accept="image/*" />
+                        <VisuallyHiddenInput type="file" accept="image/*" onChange={handleFileChange}/>
                     </Button>
                 </Box>
 
