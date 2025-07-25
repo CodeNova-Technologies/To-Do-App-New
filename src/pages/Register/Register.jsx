@@ -1,7 +1,17 @@
-import { useEffect } from 'react'
-import { Container, TextField, Button, Typography, Box } from '@mui/material';
+import { useEffect, useState } from 'react'
+import { Container, TextField, Button, Typography, Box, Alert } from '@mui/material';
+import { useAuth } from '../../context/AuthContext/AuthContext';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Register() {
+
+    const { register } = useAuth();
+    const [name, setName] = useState('');
+    const [username, setUserName] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+
+    const nav = useNavigate();
 
     useEffect(() => {
         document.body.style.overflow = 'hidden';
@@ -12,6 +22,16 @@ export default function Register() {
             document.documentElement.style.overflow = '';
         };
     }, []);
+
+    const submit = () => {
+        if (!name || !username || !password) return setError('Fill all fields');
+        const success = register(name, username, password);
+        if (success) {
+            nav('/');
+        } else {
+            setError('Username already exists');
+        }
+    };
 
     return (
         <Box
@@ -37,24 +57,31 @@ export default function Register() {
                     <Typography variant="h4" align="center" mb={1}>
                         Register
                     </Typography>
+                    {error && <Alert severity="error">{error}</Alert>}
                     <TextField
                         label="Name"
+                        value={name}
+                        onChange={e => setName(e.target.value)}
                         fullWidth
                     />
                     <TextField
                         label="Username"
+                        value={username}
+                        onChange={e => setUserName(e.target.value)}
                         fullWidth
                     />
                     <TextField
                         label="Password"
                         type="password"
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
                         fullWidth
                     />
-                    <Button variant="contained" fullWidth>
+                    <Button variant="contained" fullWidth onClick={submit}>
                         Register
                     </Button>
                     <Typography align="center" mt={1}>
-                        Back to login
+                        <Link to="/">Back to login</Link>
                     </Typography>
                 </Box>
             </Container>
