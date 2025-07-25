@@ -4,6 +4,8 @@ import { Box, Button, TextField, Typography, Avatar, Paper } from '@mui/material
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import image from '../../assets/motivation.png';
 import { useState } from 'react';
+import { useAuth } from '../../context/AuthContext/AuthContext';
+import { useEffect } from 'react';
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -20,6 +22,18 @@ const VisuallyHiddenInput = styled('input')({
 export default function Profile() {
 
     const [profileImage, setProfileImage] = useState(image);
+    const { user } = useAuth();
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [name, setName] = useState('');
+
+    useEffect(() => {
+        if (user) {
+            setUsername(user.username || '');
+            setName(user.name || '');
+            setPassword(user.password || '');
+        }
+    }, [user]);
 
     const handleFileChange = (e) => {
         const file = e.target.files?.[0];
@@ -91,7 +105,7 @@ export default function Profile() {
                         }}
                     >
                         <CloudUploadIcon fontSize="small" sx={{ fontSize: '18px' }} />
-                        <VisuallyHiddenInput type="file" accept="image/*" onChange={handleFileChange}/>
+                        <VisuallyHiddenInput type="file" accept="image/*" onChange={handleFileChange} />
                     </Button>
                 </Box>
 
@@ -101,6 +115,8 @@ export default function Profile() {
                         fullWidth
                         size="medium"
                         margin="normal"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                         sx={{ height: 50 }}
                     />
 
@@ -109,6 +125,8 @@ export default function Profile() {
                         fullWidth
                         size="medium"
                         margin="normal"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
                         sx={{ height: 50 }}
                     />
 
@@ -118,6 +136,8 @@ export default function Profile() {
                         fullWidth
                         size="medium"
                         margin="normal"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                         sx={{ height: 50 }}
                     />
 
