@@ -1,34 +1,25 @@
-import React from 'react';
-import {Box,Typography,Paper,Checkbox,FormControlLabel,Stack
-} from '@mui/material';
-
-const tasks = [
-  'Design homepage',
-  'Fix login bug',
-  'Write documentation',
-  'Deploy to production',
-  'Update user profile page',
-  'Implement dark mode',
-  'Optimize database queries',
-];
+import { useTasks } from '../../context/TaskContext/TaskContext';
+import { List, ListItem, Checkbox, Typography, Container } from '@mui/material';
 
 export default function TaskList() {
+  const { tasks, toggleTask } = useTasks();
+  
   return (
-    <Box sx={{ p: 4, backgroundColor: '#e3f2fd', minHeight: '100vh' }}>
-      <Typography variant="h4" gutterBottom align="center">
-        To-Do List
-      </Typography>
-      <Paper elevation={0} sx={{ maxWidth: 700, mx: 'auto', mt: 2, p: 3 }}>
-        <Stack spacing={2}>
-          {tasks.map((task, index) => (
-            <FormControlLabel
-              key={index}
-              control={<Checkbox />}
-              label={<Typography variant="body1">{task}</Typography>}
+    <Container>
+      <Typography variant="h5" gutterBottom>To-Do List</Typography>
+      <List>
+        {tasks.map(task => (
+          <ListItem key={task.id} divider>
+            <Checkbox
+              checked={task.completed}
+              onChange={() => toggleTask(task.id)}
             />
-          ))}
-        </Stack>
-      </Paper>
-    </Box>
+            <span style={{ textDecoration: task.completed ? 'line-through' : 'none' }}>
+              {task.title}
+            </span>
+          </ListItem>
+        ))}
+      </List>
+    </Container>
   );
 }
