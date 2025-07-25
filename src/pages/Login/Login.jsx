@@ -1,7 +1,16 @@
-import { useEffect } from 'react'
-import { Container, TextField, Button, Typography, Box } from '@mui/material';
+import { useEffect, useState } from 'react'
+import { Container, TextField, Button, Typography, Box, Alert } from '@mui/material';
+import { useAuth } from '../../context/AuthContext/AuthContext';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Login() {
+
+    const { login } = useAuth();
+    const [username, setUserName] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+
+    const nav = useNavigate();
 
     useEffect(() => {
         document.body.style.overflow = 'hidden';
@@ -12,6 +21,16 @@ export default function Login() {
             document.documentElement.style.overflow = '';
         };
     }, []);
+
+    const submit = () => {
+        if (!username || !password) return setError('Fill all fields');
+        const success = login(username, password);
+        if (success) {
+            nav('/dashboard/tasks');
+        } else {
+            setError('Invalid credentials');
+        }
+    };
 
     return (
         <Box
@@ -37,17 +56,23 @@ export default function Login() {
                     <Typography variant="h4" align="center" mb={1}>
                         Login
                     </Typography>
-                    <TextField label="Username" fullWidth />
+                    {error && <Alert severity="error">{error}</Alert>}
+                    <TextField label="Username" fullWidth
+                        value={username}
+                        onChange={e => setUserName(e.target.value)}
+                    />
                     <TextField
                         label="Password"
                         type="password"
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
                         fullWidth
                     />
-                    <Button variant="contained" fullWidth>
+                    <Button variant="contained" fullWidth onClick={submit}>
                         Login
                     </Button>
                     <Typography align="center" mt={1}>
-                        Register an account
+                        <Link to="/register">Register an account</Link>
                     </Typography>
                 </Box>
             </Container>
